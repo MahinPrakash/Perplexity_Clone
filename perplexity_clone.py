@@ -50,10 +50,10 @@ if send_button==True:
             [query 1,query 2,query 3].''')
     ])
 
-    openai_llm=ChatOpenAI(model='gpt-4o-mini')
-    # groq_llm=ChatGroq(model='llama-3.1-70b-versatile',temperature=0)
+    # openai_llm=ChatOpenAI(model='gpt-4o-mini')
+    groq_llm=ChatGroq(model='llama-3.1-70b-versatile',temperature=0)
 
-    text_to_searchquery_chain=text_to_searchquery_prompt|openai_llm|StrOutputParser()|(lambda x:x[1:-1].replace('"',"").split(","))|(lambda x:[{'question':i} for i in x])
+    text_to_searchquery_chain=text_to_searchquery_prompt|groq_llm|StrOutputParser()|(lambda x:x[1:-1].replace('"',"").split(","))|(lambda x:[{'question':i} for i in x])
 
     web_page_qa_prompt1=ChatPromptTemplate.from_messages([
         ('system',"""{text} 
@@ -119,7 +119,7 @@ if send_button==True:
     final_research_report_chain=(
         RunnablePassthrough.assign(research_summary=complete_summarizer_chain)
         |final_research_prompt
-        |openai_llm
+        |groq_llm
         |StrOutputParser())
    
     st.header('Response:-')
@@ -133,7 +133,7 @@ if send_button==True:
         ('system','''Classify the provided question as either 'Yes' or 'No'. Respond 'Yes' if the question is related to healthcare and 'No' if it is unrelated to healthcare.\n{format_instructions}\nQuestion:{question}''')
     ])
 
-    prompt_classifier_chain=(prompt_classifier_prompt|openai_llm|json_parser|(lambda x:x['response']))
+    prompt_classifier_chain=(prompt_classifier_prompt|groq_llm|json_parser|(lambda x:x['response']))
 
     prompt_classifier_chain_response=prompt_classifier_chain.invoke({'question':user_input,'format_instructions':json_parser.get_format_instructions()})
 
@@ -146,3 +146,5 @@ if send_button==True:
     
     else:
         st.info("Hi,I'm A.R.I.S and I'm here to assist you with healthcare-related questions. Could you please rephrase or ask a question related to healthcare?")
+
+
