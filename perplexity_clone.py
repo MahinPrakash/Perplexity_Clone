@@ -1,9 +1,10 @@
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser,JsonOutputParser
 from langchain_core.runnables import RunnableLambda,RunnablePassthrough
 from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
 from tavily import TavilyClient
+from pydantic import BaseModel,Field
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -38,21 +39,21 @@ if send_button==True:
 
     def tavily_search_function(q):
         tavily_client=TavilyClient()
-        search_results=tavily_client.search(q,max_results=5)
+        search_results=tavily_client.search(q,max_results=7)
         return search_results['results']
 
 
     text_to_searchquery_prompt=ChatPromptTemplate.from_messages([
         ('system','''Write 3 google search queries to search online that form an "
-                "objective opinion from the following: {question}\n"
-                "You must respond with a list of strings in the following format: "
-                [query 1,query 2,query 3].''')
+            "objective opinion from the following: {question}\n".If the word 'current' or 'latest' is present in the given question then add '2024' to the search queries.
+            "You must respond with a list of strings in the following format: "
+            [query 1,query 2,query 3].''')
     ])
 
-    #openai_llm=ChatOpenAI(model='gpt-4o-mini')
-    groq_llm=ChatGroq(model='llama-3.1-70b-versatile',temperature=0)
+    openai_llm=ChatOpenAI(model='gpt-4o-mini')
+    # groq_llm=ChatGroq(model='llama-3.1-70b-versatile',temperature=0)
 
-    text_to_searchquery_chain=text_to_searchquery_prompt|groq_llm|StrOutputParser()|(lambda x:x[1:-1].replace('"',"").split(","))|(lambda x:[{'question':i} for i in x])
+    text_to_searchquery_chain=text_to_searchquery_prompt|openai_llm|StrOutputParser()|(lambda x:x[1:-1].replace('"',"").split(","))|(lambda x:[{'question':i} for i in x])
 
     web_page_qa_prompt1=ChatPromptTemplate.from_messages([
         ('system',"""{text} 
@@ -118,13 +119,30 @@ if send_button==True:
     final_research_report_chain=(
         RunnablePassthrough.assign(research_summary=complete_summarizer_chain)
         |final_research_prompt
-        |groq_llm
+        |openai_llm
         |StrOutputParser())
    
     st.header('Response:-')
+    
+    class prompt_classifier(BaseModel):
+        response:str=Field(description="'Yes' if the question is related to healthcare and 'No' if the question is not related to healthcare")
 
-    info_container = st.empty()
-    full_response = ""
-    for chunk in final_research_report_chain.stream({'question': user_input}):
-        full_response += chunk
-        info_container.info(full_response)
+    json_parser=JsonOutputParser(pydantic_object=prompt_classifier)
+
+    prompt_classifier_prompt=ChatPromptTemplate.from_messages([
+        ('system','''Classify the provided question as either 'Yes' or 'No'. Respond 'Yes' if the question is related to healthcare and 'No' if it is unrelated to healthcare.\n{format_instructions}\nQuestion:{question}''')
+    ])
+
+    prompt_classifier_chain=(prompt_classifier_prompt|openai_llm|json_parser|(lambda x:x['response']))
+
+    prompt_classifier_chain_response=prompt_classifier_chain.invoke({'question':user_input,'format_instructions':json_parser.get_format_instructions()})
+
+    if prompt_classifier_chain_response=='Yes':
+        info_container = st.empty()
+        full_response = ""
+        for chunk in final_research_report_chain.stream({'question': user_input}):
+            full_response += chunk
+            info_container.info(full_response)
+    
+    else:
+        st.info("Hi,I'm A.R.I.S and I'm here to assist you with healthcare-related questions. Could you please rephrase or ask a question related to healthcare?")
