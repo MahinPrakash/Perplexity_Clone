@@ -39,7 +39,7 @@ if send_button==True:
 
     def tavily_search_function(q):
         tavily_client=TavilyClient()
-        search_results=tavily_client.search(q,max_results=7)
+        search_results=tavily_client.search(q,max_results=8)
         return search_results['results']
 
 
