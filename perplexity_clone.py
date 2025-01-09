@@ -103,7 +103,7 @@ if send_button==True:
     For citations:
     1. Include APA in-text citations as clickable hyperlinks using this format: 
     [Author/Organization, Year](URL)
-    Example: [Smith & Johnson, 2024](https://example.com)
+    Example: [Clinical Trials Arena](https://www.clinicaltrialsarena.com/news)
 
     2. When referencing multiple pieces of information from the same source in one paragraph, include the hyperlinked citation at the end of the paragraph.
 
