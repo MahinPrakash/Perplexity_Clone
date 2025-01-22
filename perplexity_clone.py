@@ -87,18 +87,16 @@ if send_button==True:
         |multipage_qa_chain1.map()
         |RunnableLambda(summary_list_exploder))
 
-    WRITER_SYSTEM_PROMPT = "You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text." 
-
-    RESEARCH_REPORT_TEMPLATE = """Information:
+    WRITER_SYSTEM_PROMPT = """You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text. 
+    Information:
     --------
     {research_summary}
     --------
     Using the above information, answer the following question or topic: "{question}" in a detailed answer -- \
-    The report should focus on the answer to the question, be well-structured, informative, \
-    in-depth, with facts and numbers if available.
+    The answer should, be well-structured, informative, in-depth, with facts and numbers if available.
     You should strive to write the answer as long as possible, using all relevant and necessary information provided.
     Write the answer with markdown syntax.
-    You MUST determine your own concrete and valid opinion based on the given information. Avoid general or vague conclusions.You must always give more importance to the latest information that is from the year 2024 in your answer.
+    You MUST determine your own concrete and valid opinion based on the given information. Avoid general or vague conclusions.You must always give more importance to the latest information in your answer.
 
     For citations:
     1. Include APA in-text citations as clickable hyperlinks using this format: 
@@ -108,13 +106,10 @@ if send_button==True:
     
     2. When referencing multiple pieces of information from the same source in one paragraph, include the hyperlinked citation at the end of the paragraph.
 
-    3
-    . At the end of the report, include a "References" section with all source URLs in the APA in-text citations format as Hyperlinks, with no duplicates.
-      """
+    3. At the end of the report, include a "References" section with all source URLs in the APA in-text citations format as Hyperlinks, with no duplicates."""
 
     final_research_prompt=ChatPromptTemplate.from_messages([
-        ('system',WRITER_SYSTEM_PROMPT),
-        ('user',RESEARCH_REPORT_TEMPLATE)
+        ('system',WRITER_SYSTEM_PROMPT)
     ])
 
     final_research_report_chain=(
