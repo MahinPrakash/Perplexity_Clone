@@ -87,7 +87,7 @@ if send_button==True:
         |multipage_qa_chain1.map()
         |RunnableLambda(summary_list_exploder))
 
-    WRITER_SYSTEM_PROMPT = "You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text." 
+   WRITER_SYSTEM_PROMPT = "You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text." 
 
     RESEARCH_REPORT_TEMPLATE = """Information:
     --------
@@ -103,13 +103,14 @@ if send_button==True:
     For citations:
     1. Include APA in-text citations as clickable hyperlinks using this format: 
     [Author/Organization](URL)
-    Example: [Clinical Trials Arena](https://www.clinicaltrialsarena.com/news)
-
+    Example: i)[Clinical Trials Arena](https://www.clinicaltrialsarena.com/news)
+             ii)[Kaggle](https://www.kaggle.com/competitions/llms-you-cant-please-them-all)
+    
     2. When referencing multiple pieces of information from the same source in one paragraph, include the hyperlinked citation at the end of the paragraph.
 
-    3. At the end of the report, include a "References" section with all source URLs , with no duplicates.
-
-    """
+    3
+    . At the end of the report, include a "References" section with all source URLs in the APA in-text citations format as Hyperlinks, with no duplicates.
+      """
 
     final_research_prompt=ChatPromptTemplate.from_messages([
         ('system',WRITER_SYSTEM_PROMPT),
