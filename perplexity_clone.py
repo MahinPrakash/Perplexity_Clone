@@ -102,14 +102,14 @@ if send_button==True:
 
     For citations:
     1. Include APA in-text citations as clickable hyperlinks using this format: 
-    [Author/Organization, Year](URL)
+    [Author/Organization](URL)
     Example: [Clinical Trials Arena](https://www.clinicaltrialsarena.com/news)
 
     2. When referencing multiple pieces of information from the same source in one paragraph, include the hyperlinked citation at the end of the paragraph.
 
     3. At the end of the report, include a "References" section with all source URLs , with no duplicates.
 
-    Please do your best, as this is very important to my career"""
+    """
 
     final_research_prompt=ChatPromptTemplate.from_messages([
         ('system',WRITER_SYSTEM_PROMPT),
