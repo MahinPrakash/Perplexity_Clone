@@ -87,7 +87,7 @@ if send_button==True:
         |multipage_qa_chain1.map()
         |RunnableLambda(summary_list_exploder))
 
-   WRITER_SYSTEM_PROMPT = "You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text." 
+    WRITER_SYSTEM_PROMPT = "You are an AI critical thinker research assistant. Your sole purpose is to write well written, critically acclaimed, objective and structured answers for the questions asked based on the given text." 
 
     RESEARCH_REPORT_TEMPLATE = """Information:
     --------
