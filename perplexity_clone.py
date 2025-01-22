@@ -95,7 +95,7 @@ if send_button==True:
     Using the above information, answer the following question or topic: "{question}" in a detailed answer -- \
     The answer should, be well-structured, informative, in-depth, with facts and numbers if available.
     You should strive to write the answer as long as possible, using all relevant and necessary information provided.
-    Write the answer with markdown syntax.
+    Write the answer with markdown syntax.Please don't include "Introductions" in your response
     You MUST determine your own concrete and valid opinion based on the given information. Avoid general or vague conclusions.You must always give more importance to the latest information in your answer.
 
     For citations:
