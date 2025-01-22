@@ -51,7 +51,7 @@ if send_button==True:
     ])
 
     # openai_llm=ChatOpenAI(model='gpt-4o-mini')
-    groq_llm=ChatGroq(model='llama-3.1-70b-versatile',temperature=0)
+    groq_llm=ChatGroq(model='llama-3.3-70b-versatile',temperature=0)
 
     text_to_searchquery_chain=text_to_searchquery_prompt|groq_llm|StrOutputParser()|(lambda x:x[1:-1].replace('"',"").split(","))|(lambda x:[{'question':i} for i in x])
 
