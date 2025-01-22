@@ -8,7 +8,7 @@ from pydantic import BaseModel,Field
 import streamlit as st
 from dotenv import load_dotenv
 
-st.title("AI Powered Real-Time Chatbot 🤖")
+st.title("Gilead Perplexity Chatbot 🤖")
 
 user_input = st.text_input("Type your Query:", key="user_input")
 
