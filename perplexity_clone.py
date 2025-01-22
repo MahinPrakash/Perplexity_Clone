@@ -39,7 +39,7 @@ if send_button==True:
 
     def tavily_search_function(q):
         tavily_client=TavilyClient()
-        search_results=tavily_client.search(q,max_results=4,include_raw_content=True)
+        search_results=tavily_client.search(q,max_results=6,include_raw_content=True)
         return search_results['results']
 
 
@@ -70,7 +70,7 @@ if send_button==True:
     web_page_qa_chain1=RunnablePassthrough.assign(summary=lambda x:x['text'])|(lambda x:f"Summary:{x['summary']}\nURL:{x['url']}")
 
     multipage_qa_chain1=(RunnablePassthrough.assign(text=lambda x:tavily_search_function(x['question']))
-    |(lambda x:[{'question':x['question'],'text':i['raw_content'],'url':i['url']} for i in x['text']])
+    |(lambda x:[{'question':x['question'],'text':i['content'],'url':i['url']} for i in x['text']])
     |web_page_qa_chain1.map())
 
     def summary_list_exploder(l):
